@@ -22,15 +22,16 @@ void location::set_location() // случайным образом задаём 
 {
     x_coor = 2 + rand() % (length_field);
     y_coor = 2 + rand() % (width_field);
-                                                     // КОСЯК ГДЕ-ТО ТУТ!!!
-    unsigned count = store.size();  // Если убрать count из условия первого for, и вставить store.size(), то получим Stack overflow (у второго цикла это не наблюдается)
-                                    // А если удалить первый цикл совсем, то всё работает, как часы!
+    
+    unsigned count = store.size();
 
-    for (unsigned j = 0; j < count /*store.size()*/; j = j + 2) // если совпали перезапуск подбора координат
+    for (unsigned j = 0; j < count; j = j + 2) // если совпали перезапуск подбора координат
     {
         if (x_coor == store[j] && y_coor == store[j + 1])
         {
             set_location();
+            return; // чтобы после выполнения вызванной set_location не продолжалось выполнение текущей функции.
+					//Иначе иногда выскакивает баг, см ссылку на форум в main.cpp
         }
     }
     for (unsigned i = 0; i < count; i = i + 2) // пишем новые координаты в элементы вектора с максимальными значениями
